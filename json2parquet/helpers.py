@@ -23,6 +23,7 @@ def _convert_schema(redshift_schema):
     for column in redshift_schema:
         column_name = column[0]
         column_type = column[1]
+        # Need a way to pull out timestmap info, decimal precision
         if "(" in column_type:
             # Parsing types like Varying Character (200)
             result = re.search(r'(?P<type>[^\(\)]+)\((?P<size>\d+)\)', column_type)
@@ -78,34 +79,62 @@ def _get_redshift_schema(table_name, schema_name):
     return SCHEMA_QUERY
 
 
+# https://docs.aws.amazon.com/redshift/latest/dg/c_Supported_data_types.html
 REDSHIFT_TO_PYARROW_MAPPING = {
-    "SMALLINT": IntegerType,
-    "INT2": IntegerType,
-    "INTEGER": IntegerType,
-    "INT": IntegerType,
-    "INT4": IntegerType,
-    "BIGINT": LongType,
-    "INT8": LongType,
-    "BOOLEAN": BooleanType,
-    "BOOL": BooleanType,
-    "REAL": FloatType,
-    "FLOAT4": FloatType,
-    "DOUBLE PRECISION": DoubleType,
-    "FLOAT8": DoubleType,
-    "FLOAT": DoubleType,
-    "DECIMAL": DecimalType,
-    "NUMERIC": DecimalType,
-    "CHAR": StringType,
-    "CHARACTER": StringType,
-    "NCHAR": StringType,
-    "BPCHAR": StringType,
-    "VARCHAR": StringType,
-    "CHARACTER VARYING": StringType,
-    "NVARCHAR": StringType,
-    "TEXT": StringType,
-    "DATE": DateType,
-    "TIMESTAMP": TimestampType,
-    "TIMESTAMP WITHOUT TIME ZONE": TimestampType,
-    "TIMESTAMPTZ": TimestampType,
-    "TIMESTAMP WITH TIME ZONE": TimestampType,
+    # Signed 2-byte Int
+    "SMALLINT": pa.int16,
+    "INT2": pa.int16,
+
+    # Signed 4-byte Integer
+    "INTEGER": pa.int32,
+    "INT": pa.int32,
+    "INT4": pa.int32,
+
+    # Signed 8-byte Integer
+    "BIGINT": pa.int64,
+    "INT8": pa.int64,
+
+    # Logical Boolean
+    "BOOLEAN": pa.uint8,
+    "BOOL": pa.uint8,
+
+    # Single Precision Floating Point Numb
+    "REAL": pa.float32,
+    "FLOAT4": pa.float32,
+
+    # Double  Precision Floating Point Numb
+    "DOUBLE PRECISION": pa.float64,
+    "FLOAT8": pa.float64,
+    "FLOAT": pa.float64,
+
+    # Exact numeric of selectable precision
+    "DECIMAL": pa.decimal,
+    "NUMERIC": pa.decimal,
+
+    # Fixed Length String
+    # PyArrow has no concept of fixed length strings in schemas
+    "CHAR": pa.string,
+    "CHARACTER": pa.string,
+    "NCHAR": pa.string,
+    "BPCHAR": pa.string,
+
+    # Variable Length String
+    "VARCHAR": pa.string,
+    "CHARACTER VARYING": pa.string,
+    "NVARCHAR": pa.string,
+    "TEXT": pa.string,
+
+    # Calender Date Y, M, D
+    # Unsure if this should be date64 or date32
+    # Redshift might ingest it as a string
+    "DATE": pa.date64,
+
+    # Timestamp w/o TZ info
+    "TIMESTAMP": pa.timestamp,
+    "TIMESTAMP WITHOUT TIME ZONE": pa.timestamp,
+
+    # Timestamp with TZ
+    # Need a way to pull TZ info
+    "TIMESTAMPTZ": pa.timestamp,
+    "TIMESTAMP WITH TIME ZONE": pa.timestamp,
 }
