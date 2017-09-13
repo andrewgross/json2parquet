@@ -2,7 +2,7 @@ setup:
 	@pip install -r development.txt
 
 test:
-	@pytest
+	@pytest --cov=json2parquet tests/
 
 clean:
 	@rm -rf .cache
