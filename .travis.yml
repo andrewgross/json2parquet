@@ -8,9 +8,13 @@ python:
   - "3.5"
   - "3.6"
 
+env:
+  - TEST_TYPE=pre_commit
+  - TEST_TYPE=test
+
+
 install:
   make setup
 
 script:
-  make pre_commit
-  make test
+  - make ${TEST_TYPE}

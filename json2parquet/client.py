@@ -9,8 +9,10 @@ import pyarrow.parquet as pq
 
 def ingest_data(data, schema=None):
     """
-    Takes an array of dictionary objects, and a pyarrow schema with column names and types.
-    Outputs a pyarrow Batch of the data
+    data: Array of Dictionary objects
+    schema: PyArrow schema object or list of column names
+
+    return: a PyArrow Batch
     """
     if isinstance(schema, list):
         return _convert_data_with_column_names(data, schema)
@@ -18,6 +20,7 @@ def ingest_data(data, schema=None):
         return _convert_data_with_schema(data, schema)
     else:
         return _convert_data_without_schema(data)
+
 
 def _convert_data_without_schema(data):
     # Prepare for something ugly.
@@ -73,7 +76,7 @@ def load_json(filename, schema):
 
 def write_parquet(data, destination, **kwargs):
     """
-    Takes a PyArrow record batch and writes it as a parquet file to the gives destination
+    Takes a PyArrow record batch and writes it as parquet
     """
     try:
         table = pa.Table.from_batches(data)
@@ -85,4 +88,3 @@ def write_parquet(data, destination, **kwargs):
 def convert_json(input, output, schema, **kwargs):
     data = load_json(input, schema)
     write_parquet(data, output, **kwargs)
-
