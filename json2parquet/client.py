@@ -7,11 +7,27 @@ import pyarrow as pa
 import pyarrow.parquet as pq
 
 
-def ingest_data(data, schema):
+def ingest_data(data, schema=None):
     """
     Takes an array of dictionary objects, and a pyarrow schema with column names and types.
     Outputs a pyarrow Batch of the data
     """
+    if isinstance(schema, list):
+        return _convert_data_with_column_names(data, schema)
+    elif isinstance(schema, pa.Schema):
+        return _convert_data_with_schema(data, schema)
+    else:
+        return _convert_data_without_schema(data)
+
+def _convert_data_without_schema(data):
+    pass
+
+
+def _convert_data_with_column_names(data, schema):
+    pass
+
+
+def _convert_data_with_schema(data, schema):
     column_data = {}
     array_data = []
     for row in data:
