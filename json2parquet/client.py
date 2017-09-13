@@ -20,11 +20,29 @@ def ingest_data(data, schema=None):
         return _convert_data_without_schema(data)
 
 def _convert_data_without_schema(data):
-    pass
+    # Prepare for something ugly.
+    # Iterate over all of the data to find all of our column names
+    # Then parse the data as if we were given column names
+    column_names = set()
+    for row in data:
+        names = set(row.keys())
+        column_names = column_names.union(names)
+    column_names = sorted(list(column_names))
+    return _convert_data_with_column_names
 
 
 def _convert_data_with_column_names(data, schema):
-    pass
+    column_data = {}
+    array_data = []
+    for row in data:
+        for column in schema:
+            _col = column_data.get(column, [])
+            _col.append(row.get(column))
+            column_data[column] = _col
+    for column in schema:
+        _col = column_data.get(column)
+        array_data.append(pa.array(_col))
+    return pa.RecordBatch.from_arrays(array_data, schema)
 
 
 def _convert_data_with_schema(data, schema):
