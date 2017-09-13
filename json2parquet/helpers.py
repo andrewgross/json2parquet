@@ -88,10 +88,10 @@ def _get_redshift_schema(table_name, schema_name):
             data_type,
             numeric_precision,
             numeric_scale,
-            datetime_precision,
+            datetime_precision
         FROM svv_columns
-        WHERE table_schema = '{schema_name}'
-        AND table_name = '{table_name}'
+        WHERE table_schema = '{table_name}'
+        AND table_name = '{schema_name}'
         ORDER BY column_name;
     """.format(table_name=table_name, schema_name=schema_name))
     return SCHEMA_QUERY
@@ -107,17 +107,18 @@ REDSHIFT_TO_PYARROW_MAPPING = {
     "INT2": pa.int16,
 
     # Signed 4-byte Integer
-    "INTEGER": pa.int32,
-    "INT": pa.int32,
-    "INT4": pa.int32,
+    # Trying these as int64 since python blows up with int32
+    "INTEGER": pa.int64,
+    "INT": pa.int64,
+    "INT4": pa.int64,
 
     # Signed 8-byte Integer
     "BIGINT": pa.int64,
     "INT8": pa.int64,
 
     # Logical Boolean
-    "BOOLEAN": pa.uint8,
-    "BOOL": pa.uint8,
+    "BOOLEAN": pa.bool_,
+    "BOOL": pa.bool_,
 
     # Single Precision Floating Point Numb
     "REAL": pa.float32,
