@@ -9,7 +9,6 @@ python:
   - "3.6"
 
 env:
-  - TEST_TYPE=pre_commit
   - TEST_TYPE=test
 
 
