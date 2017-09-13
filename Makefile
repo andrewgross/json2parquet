@@ -3,7 +3,7 @@ setup:
 	@pre-commit install
 
 pre_commit:
-	@pre-commit --all-files
+	@pre-commit run --all-files
 
 test:
 	@pytest --cov=json2parquet tests/

@@ -2,7 +2,9 @@
 from __future__ import unicode_literals
 
 import logging
-import re
+
+from inspect import cleandoc
+from urlparse import urlparse
 
 import pyarrow as pa
 
@@ -32,7 +34,7 @@ def _convert_schema(redshift_schema):
     return schema
 
 
-def _convert_type(column_type, numeric_prec, numeric_scale, datetime_prec)
+def _convert_type(column_type, numeric_prec, numeric_scale, datetime_prec):
     converted_type = REDSHIFT_TO_PYARROW_MAPPING[column_type]
     if column_type in ["TIMESTAMP", "TIMESTAMP WITHOUT TIME ZONE"]:
         return converted_type('us')
@@ -41,7 +43,7 @@ def _convert_type(column_type, numeric_prec, numeric_scale, datetime_prec)
         # I think Redshift stores the TZ per value
         return converted_type('us')
     elif column_type in ["DECIMAL", "NUMERIC"]:
-        return converted_type(numeric_precision, numeric_scale)
+        return converted_type(numeric_prec, numeric_scale)
     else:
         return converted_type()
 
