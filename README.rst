@@ -83,6 +83,8 @@ Code Changes
 - Run ``make setup``
 - Run ``make test``
 - Apply your changes (don't bump version)
+- Add tests if needed
+- Run ``make test`` to ensure nothing broke
 - Submit PR
 
 Documentation Changes
