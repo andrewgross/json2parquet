@@ -96,6 +96,9 @@ def _get_redshift_schema(table_name, schema_name):
 
 
 # https://docs.aws.amazon.com/redshift/latest/dg/c_Supported_data_types.html
+# We need to figure out a way to account for whatever data type Python stuffs
+# JSON data into when loading it, as we might lose some precision when pushing
+# it in to Parquet if we are not careful.
 REDSHIFT_TO_PYARROW_MAPPING = {
     # Signed 2-byte Int
     "SMALLINT": pa.int16,
