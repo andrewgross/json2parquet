@@ -25,7 +25,7 @@ setup(
     name='json2parquet',
     version=version,
     description='A simple Parquet converter for JSON/python data',
-    long_description=readme + changelog,
+    long_description=readme + '\n\n' + changelog,
     author='Andrew Gross',
     author_email='andrew.w.gross@gmail.com',
     url='https://github.com/andrewgross/json2parquet',
