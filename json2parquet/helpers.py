@@ -22,17 +22,28 @@ def _convert_schema(redshift_schema):
     fields = []
     for column in redshift_schema:
         column_name = column[0]
-        column_type = column[1]
-        # Need a way to pull out timestmap info, decimal precision
-        if "(" in column_type:
-            # Parsing types like Varying Character (200)
-            result = re.search(r'(?P<type>[^\(\)]+)\((?P<size>\d+)\)', column_type)
-            column_type = result.groupdict()['type']
-        converted_type = REDSHIFT_TO_PYARROW_MAPPING[column_type.upper()]
-        fields.append(pa.field(column_name, converted_type()))
+        column_type = column[1].upper()
+        numeric_precision = column[2]
+        numeric_scale = column[3]
+        datetime_precision = column[4]
+        converted_type = _convert_type(column_type, numeric_precision, numeric_scale, datetime_precision)
+        fields.append(pa.field(column_name, converted_type))
     schema = pa.schema(fields)
     return schema
 
+
+def _convert_type(column_type, numeric_prec, numeric_scale, datetime_prec)
+    converted_type = REDSHIFT_TO_PYARROW_MAPPING[column_type]
+    if column_type in ["TIMESTAMP", "TIMESTAMP WITHOUT TIME ZONE"]:
+        return converted_type('us')
+    elif column_type in ["TIMESTAMPTZ", "TIMESTAMP WITH TIME ZONE"]:
+        # We have no way to get TZ info from Redshift schema and
+        # I think Redshift stores the TZ per value
+        return converted_type('us')
+    elif column_type in ["DECIMAL", "NUMERIC"]:
+        return converted_type(numeric_precision, numeric_scale)
+    else:
+        return converted_type()
 
 
 def run_redshift_query(query, redshift_uri, isolation_level=1):
@@ -70,7 +81,12 @@ def _get_redshift_schema(table_name, schema_name):
     Slower perf than using pg_table_def, but gets Spectrum tables
     """
     SCHEMA_QUERY = cleandoc("""
-        SELECT column_name, data_type
+        SELECT
+            column_name,
+            data_type,
+            numeric_precision,
+            numeric_scale,
+            datetime_precision,
         FROM svv_columns
         WHERE table_schema = '{schema_name}'
         AND table_name = '{table_name}'
@@ -125,16 +141,17 @@ REDSHIFT_TO_PYARROW_MAPPING = {
     "TEXT": pa.string,
 
     # Calender Date Y, M, D
-    # Unsure if this should be date64 or date32
-    # Redshift might ingest it as a string
-    "DATE": pa.date64,
+    # Redshift spec has Date with 1 day resolution
+    "DATE": pa.date32,
 
     # Timestamp w/o TZ info
+    # Redshift spec has Timestamp at 1 microsecond resolution
     "TIMESTAMP": pa.timestamp,
     "TIMESTAMP WITHOUT TIME ZONE": pa.timestamp,
 
     # Timestamp with TZ
     # Need a way to pull TZ info
+    # Redshift spec has Timestamp at 1 microsecond resolution
     "TIMESTAMPTZ": pa.timestamp,
     "TIMESTAMP WITH TIME ZONE": pa.timestamp,
 }
