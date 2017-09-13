@@ -3,3 +3,11 @@ tests/__pycache__
 *.pyc
 *.swp
 .coverage
+.DS_Store
+dist/*
+.build.log
+*.egg-info/*
+build/*
+htmlcov/*
+*~
+*#

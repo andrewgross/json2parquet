@@ -27,7 +27,7 @@ setup(
     description='A simple Parquet converter for JSON/python data',
     long_description=readme + changelog,
     author='Andrew Gross',
-    author_email='andrew.w.gross@gmail',
+    author_email='andrew.w.gross@gmail.com',
     url='https://github.com/andrewgross/json2parquet',
     install_requires=[
         'pyarrow==0.6.0'
