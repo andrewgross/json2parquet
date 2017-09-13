@@ -10,7 +10,9 @@ sets, or people who don’t have a huge issue with speed.
 Installation
 ~~~~~~~~~~~~
 
-``pip install json2parquet``
+.. code:: bash
+
+    pip install json2parquet
 
 Usage
 ~~~~~
