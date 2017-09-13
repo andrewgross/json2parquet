@@ -7,6 +7,11 @@ files. It copies the data several times in memory. It is not meant to be
 the fastest thing available. However, it is convenient for smaller data
 sets, or people who don’t have a huge issue with speed.
 
+Installation
+~~~~~~~~~~~~
+
+``pip install json2parquet``
+
 Usage
 ~~~~~
 
@@ -16,7 +21,73 @@ Here’s how to load a random JSON dataset.
 
     from json2parquet import convert_json
 
+    # Infer Schema (requires reading dataset for column names)
     convert_json(input_filename, output_filename)
+
+    # Given columns
+    convert_json(input_filename, output_filename, ["my_column", "my_int"])
+
+    # Given PyArrow schema
+    import pyarrow as pa
+    schema = pa.schema([
+        pa.field('my_column', pa.string),
+        pa.field('my_int', pa.int64),
+    ])
+    convert_json(input_filename, output_filename, schema)
+
+
+You can also work with Python data structures directly
+
+
+.. code:: python
+
+    from json2parquet import load_json, ingest_data, write_parquet
+
+    # Loading JSON to a PyArrow RecordBatch (schema is optional as above)
+    load_json(input_filename, schema)
+
+    # Working with a list of dictionaries
+    ingest_data(input_data, schema)
+
+    # Writing Parquet Files from PyArrow Record Batches
+    write_parquet(data, destination)
+
+    # You can also pass any keyword arguments that PyArrow accepts
+    write_parquet(data, destination, compression='snappy')
+
+
+Although ``json2parquet`` can infer schemas, it has helpers to pull in external ones as well
+
+.. code:: python
+
+    from json2parquet import load_json
+    from json2parquet.helpers import get_schema_from_redshift
+
+    # Fetch the schema from Redshift (requires psycopg2)
+    schema = get_schema_from_redshift(redshift_schema, redshift_table, redshift_uri)
+
+    # Load JSON with the Redshift schema
+    load_json(input_filename, schema)
+
+
+Contributing
+~~~~~~~~~~~~
+
+
+Code Changes
+------------
+
+- Clone a fork of the library
+- Run ``make setup``
+- Run ``make test``
+- Apply your changes (don't bump version)
+- Submit PR
+
+Documentation Changes
+---------------------
+
+It is always a struggle to keep documentation correct and up to date.  Any fixes are welcome.  If you don't want to clone the repo to work locally, please feel free to edit using Github and to submit Pull Requests via Github's built in features.
+
 
 .. |Build Status| image:: https://travis-ci.org/andrewgross/json2parquet.svg?branch=master
    :target: https://travis-ci.org/andrewgross/json2parquet
