@@ -47,3 +47,8 @@ def write_parquet(data, destination, **kwargs):
         table = pa.Table.from_batches([data])
     pq.write_table(table, destination, **kwargs)
 
+
+def convert_json(input, output, schema, **kwargs):
+    data = load_json(input, schema)
+    write_parquet(data, output, **kwargs)
+
