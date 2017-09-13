@@ -1,0 +1,21 @@
+-   repo: git://github.com/pre-commit/pre-commit-hooks
+    sha: v0.9.1
+    hooks:
+    -   id: trailing-whitespace
+        exclude: \.html$
+    -   id: end-of-file-fixer
+        exclude: \.html$
+    -   id: autopep8-wrapper
+        args:
+        - -i
+        - --ignore=E309,E501
+    -   id: check-json
+    -   id: check-yaml
+    -   id: debug-statements
+    -   id: requirements-txt-fixer
+    -   id: flake8
+        exclude: \/migrations\/
+-   repo: git@github.com:pre-commit/pre-commit
+    sha: v1.1.0
+    hooks:
+    -   id: validate_manifest

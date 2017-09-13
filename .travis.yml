@@ -12,4 +12,5 @@ install:
   make setup
 
 script:
+  make pre_commit
   make test
