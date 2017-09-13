@@ -17,7 +17,7 @@ Installation
 Usage
 ~~~~~
 
-Here’s how to load a random JSON dataset.
+Here's how to load a random JSON dataset.
 
 .. code:: python
 
