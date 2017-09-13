@@ -16,6 +16,8 @@ cache:
   - $HOME/.cache/pip
 
 install:
+  - pip list
+  - pip install setuptools --upgrade
   - make setup
 
 script:
