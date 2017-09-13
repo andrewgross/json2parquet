@@ -43,6 +43,7 @@ publish: clean tag
 		echo "Uploading to '$(CUSTOM_PIP_INDEX)'"; \
 		python setup.py sdist upload -r "$(CUSTOM_PIP_INDEX)"; \
 		python setup.py bdist_wheel upload -r "$(CUSTOM_PIP_INDEX)"; \
+		python3 setup.py bdist_wheel upload -r "$(CUSTOM_PIP_INDEX)"; \
 	else \
 		echo "You should create a file called '.pypirc' under your home dir.\n"; \
 		echo "That's the right place to configure 'pypi' repos.\n"; \
