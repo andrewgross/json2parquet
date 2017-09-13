@@ -25,6 +25,38 @@ def test_ingest():
     assert converted_data.to_pydict() == {'foo': [1, 10], 'bar': [2, 20]}
 
 
+def test_ingest_with_column_names():
+    """
+    Test ingesting data with given column names
+    """
+    schema = ["foo", "bar"]
+
+    data = [{"foo": 1, "bar": 2}, {"foo": 10, "bar": 20}]
+
+    converted_data = client.ingest_data(data, schema)
+    assert converted_data.to_pydict() == {'foo': [1, 10], 'bar': [2, 20]}
+
+
+def test_ingest_with_no_schema():
+    """
+    Test ingesting data with no schema
+    """
+    data = [{"foo": 1, "bar": 2}, {"foo": 10, "bar": 20}]
+
+    converted_data = client.ingest_data(data)
+    assert converted_data.to_pydict() == {'foo': [1, 10], 'bar': [2, 20]}
+
+
+def test_ingest_with_no_schema_and_uneven_column_names():
+    """
+    Test ingesting data with no schema and incomplete JSON records
+    """
+    data = [{"foo": 1, "bar": 2}, {"foo": 10, "bar": 20}, {"foo": 100, "bar": 200, "baz": 300}]
+
+    converted_data = client.ingest_data(data)
+    assert converted_data.to_pydict() == {'foo': [1, 10, 100], 'bar': [2, 20, 200], 'baz': [None, None, 300]}
+
+
 def test_load_json():
     """
     Test loading JSON from a file

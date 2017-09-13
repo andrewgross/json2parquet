@@ -28,7 +28,7 @@ def _convert_data_without_schema(data):
         names = set(row.keys())
         column_names = column_names.union(names)
     column_names = sorted(list(column_names))
-    return _convert_data_with_column_names
+    return _convert_data_with_column_names(data, column_names)
 
 
 def _convert_data_with_column_names(data, schema):
