@@ -11,9 +11,12 @@ python:
 env:
   - TEST_TYPE=test
 
+cache:
+  directories:
+  - $HOME/.cache/pip
 
 install:
-  make setup
+  - make setup
 
 script:
   - make ${TEST_TYPE}
