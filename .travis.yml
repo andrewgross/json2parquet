@@ -17,6 +17,7 @@ cache:
 
 install:
   - pip install pyarrow>=0.6.0
+  - pip install pandas==0.20.3
   - make setup
 
 script:
