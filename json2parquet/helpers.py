@@ -37,11 +37,11 @@ def _convert_schema(redshift_schema):
 def _convert_type(column_type, numeric_prec, numeric_scale, datetime_prec):
     converted_type = REDSHIFT_TO_PYARROW_MAPPING[column_type]
     if column_type in ["TIMESTAMP", "TIMESTAMP WITHOUT TIME ZONE"]:
-        return converted_type('us')
+        return converted_type('ns')
     elif column_type in ["TIMESTAMPTZ", "TIMESTAMP WITH TIME ZONE"]:
         # We have no way to get TZ info from Redshift schema and
         # I think Redshift stores the TZ per value
-        return converted_type('us')
+        return converted_type('ns')
     elif column_type in ["DECIMAL", "NUMERIC"]:
         return converted_type(numeric_prec, numeric_scale)
     else:

@@ -5,6 +5,7 @@ import json
 
 import pyarrow as pa
 import pyarrow.parquet as pq
+import pandas as pd
 
 
 def ingest_data(data, schema=None):
@@ -58,6 +59,11 @@ def _convert_data_with_schema(data, schema):
             column_data[column] = _col
     for column in schema:
         _col = column_data.get(column.name)
+        if isinstance(column.type, pa.lib.TimestampType):
+            _converted_datetimes = []
+            for item in _col:
+                _converted_datetimes.append(pd.to_datetime(item))
+            _col = _converted_datetimes
         array_data.append(pa.array(_col, type=column.type))
     return pa.RecordBatch.from_arrays(array_data, schema.names)
 
