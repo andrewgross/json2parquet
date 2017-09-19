@@ -1,6 +1,11 @@
 Changelog
 ---------
 
+0.0.4
+~~~~~~
+- Fix ingestion of timestamp data with ns resolution
+
+
 0.0.3
 ~~~~~~
 - Add pandas dependency

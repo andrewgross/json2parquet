@@ -72,6 +72,12 @@ Although ``json2parquet`` can infer schemas, it has helpers to pull in external 
     load_json(input_filename, schema)
 
 
+Operational Notes
+~~~~~~~~~~~~~~~~~
+
+If you are using this library to convert JSON data to be read by ``Spark``, ``Athena``, ``Spectrum`` or ``Presto`` make sure you use ``use_deprecated_int96_timestamps`` when writing your Parquet files, otherwise you will see some really screwy dates.
+
+
 Contributing
 ~~~~~~~~~~~~
 
