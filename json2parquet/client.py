@@ -66,7 +66,10 @@ def _convert_data_with_schema(data, schema):
         elif column.type.id == pa.float64().id:
             array_data.append(pa.array(_col, type=pa.float64()))
         elif column.type.id == pa.float32().id:
-            array_data.append(pa.array(_col, type=pa.float32()))
+            # Python doesn't have a native float32 type
+            # and PyArrow cannot cast float64 -> float32
+            _col = pd.to_numeric(_col, downcast='float')
+            array_data.append(pa.Array.from_pandas(_col, type=pa.float32()))
         else:
             array_data.append(pa.array(_col, type=column.type))
     return pa.RecordBatch.from_arrays(array_data, schema.names)

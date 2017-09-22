@@ -1,21 +1,22 @@
 Changelog
 ---------
 
+0.0.6
+~~~~~~
+- Add automatic downcasting for Python ``float`` to ``float32`` via pandas when schema specifies ``pa.float32()``
+
 0.0.5
 ~~~~~~
 - Fix conversion of float types to be size specific
-
 
 0.0.4
 ~~~~~~
 - Fix ingestion of timestamp data with ns resolution
 
-
 0.0.3
 ~~~~~~
 - Add pandas dependency
 - Add proper ingestion of timestamp data using Pandas ``to_datetime``
-
 
 0.0.2
 ~~~~~~
