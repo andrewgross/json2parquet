@@ -1,6 +1,11 @@
 Changelog
 ---------
 
+0.0.5
+~~~~~~
+- Fix conversion of float types to be size specific
+
+
 0.0.4
 ~~~~~~
 - Fix ingestion of timestamp data with ns resolution

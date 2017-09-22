@@ -62,6 +62,11 @@ def _convert_data_with_schema(data, schema):
         if isinstance(column.type, pa.lib.TimestampType):
             _col = pd.to_datetime(_col)
             array_data.append(pa.Array.from_pandas(_col, type=pa.timestamp('ns')))
+        # Float types are ambiguous for conversions, need to specify the exact type
+        elif column.type.id == pa.float64().id:
+            array_data.append(pa.array(_col, type=pa.float64()))
+        elif column.type.id == pa.float32().id:
+            array_data.append(pa.array(_col, type=pa.float32()))
         else:
             array_data.append(pa.array(_col, type=column.type))
     return pa.RecordBatch.from_arrays(array_data, schema.names)
