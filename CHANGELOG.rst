@@ -1,6 +1,10 @@
 Changelog
 ---------
 
+0.0.8
+~~~~~~
+- Fix conversion of timestamp columns
+
 0.0.7
 ~~~~~~
 - Force converted Timestamps to max out at `pandas.Timestamp.max` if they exceed the resolution of `datetime[ns]`
