@@ -66,7 +66,7 @@ def _convert_data_with_schema(data, schema):
                     _converted_col.append(pd.to_datetime(t))
                 except pd._libs.tslib.OutOfBoundsDatetime:
                     _converted_col.append(pd.Timestamp.max)
-            array_data.append(pa.Array.from_pandas(_converted_col, type=pa.timestamp('ns')))
+            array_data.append(pa.Array.from_pandas(pd.to_datetime(_converted_col), type=pa.timestamp('ns')))
         # Float types are ambiguous for conversions, need to specify the exact type
         elif column.type.id == pa.float64().id:
             array_data.append(pa.array(_col, type=pa.float64()))
