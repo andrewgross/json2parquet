@@ -1,6 +1,10 @@
 Changelog
 ---------
 
+0.0.9
+~~~~~~
+- Fix conversion of timestamp columns again
+
 0.0.8
 ~~~~~~
 - Fix conversion of timestamp columns
