@@ -11,19 +11,24 @@ import pyarrow as pa
 logger = logging.getLogger("json2parquet")
 
 
-def get_schema_from_redshift(redshift_schema, redshift_table, redshift_uri):
+def get_schema_from_redshift(redshift_schema, redshift_table, redshift_uri, partition_columns=None):
     """
     Creates a PyArrow Schema based on a Redshift Table, uses psycopg2
     """
+    if partition_columns is None:
+        partition_columns = []
     query = _get_redshift_schema(redshift_schema, redshift_table)
     raw_schema, _ = run_redshift_query(query, redshift_uri)
-    return _convert_schema(raw_schema)
+    return _convert_schema(raw_schema, partition_columns)
 
 
-def _convert_schema(redshift_schema):
+def _convert_schema(redshift_schema, partition_columns):
     fields = []
     for column in redshift_schema:
         column_name = column[0]
+        if column_name in partition_columns:
+            # Allow skipping virtual columns used for partitioning
+            continue
         column_type = column[1].upper()
         numeric_precision = column[2]
         numeric_scale = column[3]

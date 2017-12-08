@@ -1,6 +1,10 @@
 Changelog
 ---------
 
+0.0.10
+~~~~~~
+- Allow passing partition columns when getting a Redshift schema, so they can be skipped
+
 0.0.9
 ~~~~~~
 - Fix conversion of timestamp columns again
