@@ -1,6 +1,10 @@
 Changelog
 ---------
 
+0.0.12
+~~~~~~
+- Allow casting of int64 -> int32
+
 0.0.11
 ~~~~~~
 - Bump PyArrow and allow int32 data
