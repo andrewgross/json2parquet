@@ -134,8 +134,8 @@ REDSHIFT_TO_PYARROW_MAPPING = {
     "FLOAT": pa.float64,
 
     # Exact numeric of selectable precision
-    "DECIMAL": pa.decimal,
-    "NUMERIC": pa.decimal,
+    "DECIMAL": pa.decimal128,
+    "NUMERIC": pa.decimal128,
 
     # Fixed Length String
     # PyArrow has no concept of fixed length strings in schemas
