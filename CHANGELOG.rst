@@ -1,6 +1,10 @@
 Changelog
 ---------
 
+0.0.11
+~~~~~~
+- Bump PyArrow and allow int32 data
+
 0.0.10
 ~~~~~~
 - Allow passing partition columns when getting a Redshift schema, so they can be skipped
