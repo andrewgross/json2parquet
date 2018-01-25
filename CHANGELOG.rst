@@ -1,6 +1,10 @@
 Changelog
 ---------
 
+0.0.13
+~~~~~~
+- Fix decimal type for newer pyarrow versions
+
 0.0.12
 ~~~~~~
 - Allow casting of int64 -> int32
