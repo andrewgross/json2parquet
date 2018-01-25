@@ -62,7 +62,7 @@ def test_load_json():
     Test loading JSON from a file
     """
     schema = pa.schema([
-        pa.field("foo", pa.int64()),
+        pa.field("foo", pa.int32()),
         pa.field("bar", pa.int64())
     ])
 
@@ -77,7 +77,7 @@ def test_convert_json():
     Test converting a JSON file to Parquet
     """
     schema = pa.schema([
-        pa.field("foo", pa.int64()),
+        pa.field("foo", pa.int32()),
         pa.field("bar", pa.int64())
     ])
 

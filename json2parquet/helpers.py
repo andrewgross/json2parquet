@@ -112,10 +112,9 @@ REDSHIFT_TO_PYARROW_MAPPING = {
     "INT2": pa.int16,
 
     # Signed 4-byte Integer
-    # Trying these as int64 since python blows up with int32
-    "INTEGER": pa.int64,
-    "INT": pa.int64,
-    "INT4": pa.int64,
+    "INTEGER": pa.int32,
+    "INT": pa.int32,
+    "INT4": pa.int32,
 
     # Signed 8-byte Integer
     "BIGINT": pa.int64,
