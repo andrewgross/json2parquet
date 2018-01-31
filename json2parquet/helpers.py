@@ -18,7 +18,7 @@ def get_schema_from_redshift(redshift_schema, redshift_table, redshift_uri, part
     if partition_columns is None:
         partition_columns = []
     query = _get_redshift_schema(redshift_schema, redshift_table)
-    raw_schema, _ = run_redshift_query(query, redshift_uri)
+    raw_schema = run_redshift_query(query, redshift_uri)
     return _convert_schema(raw_schema, partition_columns)
 
 
@@ -68,18 +68,11 @@ def run_redshift_query(query, redshift_uri, isolation_level=1):
         with conn.cursor() as cursor:
             cursor.execute(query)
             result = None
-            error = None
             try:
                 result = cursor.fetchall()
-            except psycopg2.ProgrammingError as e:
-                error = e
-            except psycopg2.OperationalError as e:
-                error = e
-            except psycopg2.InternalError as e:
-                error = e
             finally:
                 cursor.close()
-            return result, error
+            return result
 
 
 def _get_redshift_schema(table_name, schema_name):
