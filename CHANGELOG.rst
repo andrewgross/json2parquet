@@ -1,6 +1,10 @@
 Changelog
 ---------
 
+0.0.14
+~~~~~~
+- Stop silencing Redshift errors.
+
 0.0.13
 ~~~~~~
 - Fix decimal type for newer pyarrow versions
