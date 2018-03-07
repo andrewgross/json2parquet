@@ -43,7 +43,7 @@ You can also work with Python data structures directly
 
 .. code:: python
 
-    from json2parquet import load_json, ingest_data, write_parquet
+    from json2parquet import load_json, ingest_data, write_parquet, write_parquet_dataset
 
     # Loading JSON to a PyArrow RecordBatch (schema is optional as above)
     load_json(input_filename, schema)
@@ -56,6 +56,9 @@ You can also work with Python data structures directly
 
     # You can also pass any keyword arguments that PyArrow accepts
     write_parquet(data, destination, compression='snappy')
+
+    # You can also write partitioned date
+    write_parquet_dataset(data, destination_dir, partition_cols=["foo", "bar", "baz"])
 
 
 If you know your schema, you can specify custom datetime formats (only one for now).  This formatting will be ignored if you don't pass a PyArrow schema.

@@ -99,13 +99,32 @@ def load_json(filename, schema, date_format=None):
 
 def write_parquet(data, destination, **kwargs):
     """
-    Takes a PyArrow record batch and writes it as parquet
+    data: PyArrow record batch
+    destination: Output file name
+
+    **kwargs: defined at https://arrow.apache.org/docs/python/generated/pyarrow.parquet.write_table.html
     """
     try:
         table = pa.Table.from_batches(data)
     except TypeError:
         table = pa.Table.from_batches([data])
     pq.write_table(table, destination, **kwargs)
+
+
+def write_parquet_dataset(data, destination, **kwargs):
+    """
+    data: PyArrow record batch
+    destination: Output directory
+
+    **kwargs: defined at https://arrow.apache.org/docs/python/generated/pyarrow.parquet.write_table.html
+
+    This adds support for writing with partitions, compared with 'write_table'.
+    """
+    try:
+        table = pa.Table.from_batches(data)
+    except TypeError:
+        table = pa.Table.from_batches([data])
+    pq.write_to_dataset(table, destination, **kwargs)
 
 
 def convert_json(input, output, schema, date_format=None, **kwargs):
