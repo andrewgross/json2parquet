@@ -58,6 +58,22 @@ You can also work with Python data structures directly
     write_parquet(data, destination, compression='snappy')
 
 
+If you know your schema, you can specify custom datetime formats (only one for now).  This formatting will be ignored if you don't pass a PyArrow schema.
+
+.. code:: python
+
+    from json2parquet import convert_json
+
+    # Given PyArrow schema
+    import pyarrow as pa
+    schema = pa.schema([
+        pa.field('my_column', pa.string),
+        pa.field('my_int', pa.int64),
+    ])
+    date_format = "%Y-%m-%dT%H:%M:%S.%fZ"
+    convert_json(input_filename, output_filename, schema, date_format=date_format)
+
+
 Although ``json2parquet`` can infer schemas, it has helpers to pull in external ones as well
 
 .. code:: python

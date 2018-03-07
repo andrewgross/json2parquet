@@ -8,17 +8,18 @@ import pyarrow.parquet as pq
 import pandas as pd
 
 
-def ingest_data(data, schema=None):
+def ingest_data(data, schema=None, date_format=None):
     """
     data: Array of Dictionary objects
     schema: PyArrow schema object or list of column names
+    date_format: Pandas datetime format string (with schema only)
 
     return: a PyArrow Batch
     """
     if isinstance(schema, list):
         return _convert_data_with_column_names(data, schema)
     elif isinstance(schema, pa.Schema):
-        return _convert_data_with_schema(data, schema)
+        return _convert_data_with_schema(data, schema, date_format=date_format)
     else:
         return _convert_data_without_schema(data)
 
@@ -49,7 +50,7 @@ def _convert_data_with_column_names(data, schema):
     return pa.RecordBatch.from_arrays(array_data, schema)
 
 
-def _convert_data_with_schema(data, schema):
+def _convert_data_with_schema(data, schema, date_format=None):
     column_data = {}
     array_data = []
     for row in data:
@@ -63,7 +64,7 @@ def _convert_data_with_schema(data, schema):
             _converted_col = []
             for t in _col:
                 try:
-                    _converted_col.append(pd.to_datetime(t))
+                    _converted_col.append(pd.to_datetime(t, format=date_format))
                 except pd._libs.tslib.OutOfBoundsDatetime:
                     _converted_col.append(pd.Timestamp.max)
             array_data.append(pa.Array.from_pandas(pd.to_datetime(_converted_col), type=pa.timestamp('ns')))
@@ -84,7 +85,7 @@ def _convert_data_with_schema(data, schema):
     return pa.RecordBatch.from_arrays(array_data, schema.names)
 
 
-def load_json(filename, schema):
+def load_json(filename, schema, date_format=None):
     """
     Simple but inefficient way to load data from a newline delineated json file
     """
@@ -93,7 +94,7 @@ def load_json(filename, schema):
         for line in f.readlines():
             if line:
                 json_data.append(json.loads(line))
-    return ingest_data(json_data, schema)
+    return ingest_data(json_data, schema, date_format=date_format)
 
 
 def write_parquet(data, destination, **kwargs):
@@ -107,6 +108,6 @@ def write_parquet(data, destination, **kwargs):
     pq.write_table(table, destination, **kwargs)
 
 
-def convert_json(input, output, schema, **kwargs):
-    data = load_json(input, schema)
+def convert_json(input, output, schema, date_format=None, **kwargs):
+    data = load_json(input, schema, date_format=date_format)
     write_parquet(data, output, **kwargs)
