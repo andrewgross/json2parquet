@@ -1,6 +1,11 @@
 Changelog
 ---------
 
+0.0.15
+~~~~~~
+- Add support for custom datetime formatting (thanks @Madhu1512)
+- Add support for writing partitioned datasets (thanks @mthota15)
+
 0.0.14
 ~~~~~~
 - Stop silencing Redshift errors.
