@@ -1,6 +1,10 @@
 Changelog
 ---------
 
+0.0.156
+~~~~~~
+- Properly convert Boolean fields passed as numbers to PyArrow booleans.
+
 0.0.15
 ~~~~~~
 - Add support for custom datetime formatting (thanks @Madhu1512)
