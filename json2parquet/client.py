@@ -80,6 +80,8 @@ def _convert_data_with_schema(data, schema, date_format=None):
             # PyArrow 0.8.0 can cast int64 -> int32
             _col64 = pa.array(_col, type=pa.int64())
             array_data.append(_col64.cast(pa.int32()))
+        elif column.type.id == pa.bool_().id:
+            array_data.append(pa.array(pd.Series(_col, dtype=bool), type=column.type))
         else:
             array_data.append(pa.array(_col, type=column.type))
     return pa.RecordBatch.from_arrays(array_data, schema.names)
