@@ -1,7 +1,11 @@
 Changelog
 ---------
 
-0.0.156
+0.0.17
+~~~~~~
+- Bring `write_parquet_dataset` to a top level import
+
+0.0.16
 ~~~~~~
 - Properly convert Boolean fields passed as numbers to PyArrow booleans.
 
