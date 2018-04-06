@@ -1,6 +1,10 @@
 Changelog
 ---------
 
+0.0.18
+~~~~~~
+- Allow `schema` to be an optional argument to `convert_json`
+
 0.0.17
 ~~~~~~
 - Bring `write_parquet_dataset` to a top level import
