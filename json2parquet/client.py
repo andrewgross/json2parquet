@@ -87,7 +87,7 @@ def _convert_data_with_schema(data, schema, date_format=None):
     return pa.RecordBatch.from_arrays(array_data, schema.names)
 
 
-def load_json(filename, schema, date_format=None):
+def load_json(filename, schema=None, date_format=None):
     """
     Simple but inefficient way to load data from a newline delineated json file
     """
@@ -96,7 +96,7 @@ def load_json(filename, schema, date_format=None):
         for line in f.readlines():
             if line:
                 json_data.append(json.loads(line))
-    return ingest_data(json_data, schema, date_format=date_format)
+    return ingest_data(json_data, schema=schema, date_format=date_format)
 
 
 def write_parquet(data, destination, **kwargs):
@@ -129,6 +129,6 @@ def write_parquet_dataset(data, destination, **kwargs):
     pq.write_to_dataset(table, destination, **kwargs)
 
 
-def convert_json(input, output, schema, date_format=None, **kwargs):
-    data = load_json(input, schema, date_format=date_format)
+def convert_json(input, output, schema=None, date_format=None, **kwargs):
+    data = load_json(input, schema=schema, date_format=date_format)
     write_parquet(data, output, **kwargs)
