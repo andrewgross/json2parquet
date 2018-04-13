@@ -40,6 +40,20 @@ def test_ingest_with_numeric_boolean():
     assert converted_data.to_pydict() == {'foo': [False, True]}
 
 
+def test_ingest_with_boolean_none():
+    """
+    Test ingesting data with boolean values and none
+    """
+    schema = pa.schema([
+        pa.field("foo", pa.bool_())
+    ])
+
+    data = [{"foo": 0}, {"foo": 1}, {"foo": None}]
+
+    converted_data = client.ingest_data(data, schema)
+    assert converted_data.to_pydict() == {'foo': [False, True, None]}
+
+
 def test_ingest_with_datetime():
     """
     Test ingesting datetime data with a given schema

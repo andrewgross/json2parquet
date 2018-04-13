@@ -81,10 +81,17 @@ def _convert_data_with_schema(data, schema, date_format=None):
             _col64 = pa.array(_col, type=pa.int64())
             array_data.append(_col64.cast(pa.int32()))
         elif column.type.id == pa.bool_().id:
-            array_data.append(pa.array(pd.Series(_col, dtype=bool), type=column.type))
+            _col = map(_boolean_converter, _col)
+            array_data.append(pa.array(_col, type=column.type))
         else:
             array_data.append(pa.array(_col, type=column.type))
     return pa.RecordBatch.from_arrays(array_data, schema.names)
+
+
+def _boolean_converter(val):
+    if val is None:
+        return val
+    return bool(val)
 
 
 def load_json(filename, schema=None, date_format=None):
