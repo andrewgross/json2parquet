@@ -1,6 +1,10 @@
 Changelog
 ---------
 
+0.0.20
+~~~~~~
+- Add support for DATE fields. h/t to Spectrify for the implementation
+
 0.0.19
 ~~~~~~
 - Properly handle boolean columns with `None`.
