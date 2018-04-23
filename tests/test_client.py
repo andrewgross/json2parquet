@@ -150,3 +150,18 @@ def test_convert_json():
         output_path = f.name
         client.convert_json(input_path, output_path, schema)
         assert filecmp.cmp(expected_file, output_path)
+
+
+def test_date_conversion():
+    """
+    Test converting DATE columns to days since epoch
+    """
+    schema = pa.schema([
+        pa.field("foo", pa.date32())
+    ])
+
+    data = [{"foo": "2018-01-01"}, {"foo": "2018-01-02"}]
+
+    converted_data = client.ingest_data(data, schema)
+    assert converted_data.to_pydict()['foo'][0].strftime("%Y-%m-%d") == "2018-01-01"
+    assert converted_data.to_pydict()['foo'][1].strftime("%Y-%m-%d") == "2018-01-02"
