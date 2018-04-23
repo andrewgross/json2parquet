@@ -32,7 +32,7 @@ setup(
     install_requires=[
         'pyarrow==0.8.0',
         'pandas==0.20.3',
-        'ciso8601==1.0.7'
+        'ciso8601'
     ],
     packages=[n for n in find_packages() if not n.startswith('tests')],
     include_package_data=True,
