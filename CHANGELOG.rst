@@ -1,6 +1,10 @@
 Changelog
 ---------
 
+0.0.21
+~~~~~~
+- Don't lock ciso8601 version.
+
 0.0.20
 ~~~~~~
 - Add support for DATE fields. h/t to Spectrify for the implementation
