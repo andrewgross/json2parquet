@@ -1,11 +1,16 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
+import datetime
 import json
 
+import ciso8601
 import pyarrow as pa
 import pyarrow.parquet as pq
 import pandas as pd
+
+
+epoch = datetime.datetime.utcfromtimestamp(0)
 
 
 def ingest_data(data, schema=None, date_format=None):
@@ -68,6 +73,9 @@ def _convert_data_with_schema(data, schema, date_format=None):
                 except pd._libs.tslib.OutOfBoundsDatetime:
                     _converted_col.append(pd.Timestamp.max)
             array_data.append(pa.Array.from_pandas(pd.to_datetime(_converted_col), type=pa.timestamp('ns')))
+        elif column.type.id == pa.date32().id:
+            _converted_col = map(_date_converter, _col)
+            array_data.append(pa.array(_converted_col, type=pa.date32()))
         # Float types are ambiguous for conversions, need to specify the exact type
         elif column.type.id == pa.float64().id:
             array_data.append(pa.array(_col, type=pa.float64()))
@@ -92,6 +100,11 @@ def _boolean_converter(val):
     if val is None:
         return val
     return bool(val)
+
+
+def _date_converter(date_str):
+    dt = ciso8601.parse_datetime(date_str)
+    return (dt - epoch).days
 
 
 def load_json(filename, schema=None, date_format=None):
