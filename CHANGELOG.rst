@@ -1,6 +1,10 @@
 Changelog
 ---------
 
+0.0.22
+~~~~~~
+- Bump pyarrow and Pandas versions
+
 0.0.21
 ~~~~~~
 - Don't lock ciso8601 version.
