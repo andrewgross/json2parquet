@@ -18,6 +18,7 @@ cache:
 install:
   - pip install pyarrow>=0.10.0
   - pip install pandas>=0.23.4
+  - pip install numpy>=1.15.0
   - make setup
 
 script:
