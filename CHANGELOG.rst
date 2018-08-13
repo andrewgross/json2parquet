@@ -1,6 +1,10 @@
 Changelog
 ---------
 
+0.0.23
+~~~~~~
+- Bump pyarrow, numpy and Pandas versions
+
 0.0.22
 ~~~~~~
 - Bump pyarrow and Pandas versions
