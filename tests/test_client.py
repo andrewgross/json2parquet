@@ -1,12 +1,13 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-import filecmp
 import os
 import tempfile
 
 import pandas as pd
 import pyarrow as pa
+
+from pyarrow import parquet as pq
 
 from json2parquet import client
 
@@ -147,9 +148,14 @@ def test_convert_json():
     input_path = "{}/tests/fixtures/simple_json.txt".format(os.getcwd())
     expected_file = "{}/tests/fixtures/simple.parquet".format(os.getcwd())
     with tempfile.NamedTemporaryFile() as f:
-        output_path = f.name
-        client.convert_json(input_path, output_path, schema)
-        assert filecmp.cmp(expected_file, output_path)
+        output_file = f.name
+        client.convert_json(input_path, output_file, schema)
+        output = pq.ParquetFile(output_file)
+        expected = pq.ParquetFile(expected_file)
+        assert output.metadata.num_columns == expected.metadata.num_columns
+        assert output.metadata.num_rows == expected.metadata.num_rows
+        assert output.schema.equals(expected.schema)
+        assert output.read_row_group(0).to_pydict() == expected.read_row_group(0).to_pydict()
 
 
 def test_date_conversion():
