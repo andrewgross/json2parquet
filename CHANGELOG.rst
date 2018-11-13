@@ -1,6 +1,10 @@
 Changelog
 ---------
 
+0.0.24
+~~~~~~
+- Bump pyarrow, lower lock on Numpy to `>=1.14`
+
 0.0.23
 ~~~~~~
 - Bump pyarrow, numpy and Pandas versions
