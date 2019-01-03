@@ -1,6 +1,10 @@
 Changelog
 ---------
 
+0.0.25
+~~~~~~
+- Add `write_parquet_dataset` available as a default export, thanks to @gregburek
+
 0.0.24
 ~~~~~~
 - Bump pyarrow, lower lock on Numpy to `>=1.14`
