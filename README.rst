@@ -29,6 +29,11 @@ Here's how to load a random JSON dataset.
     # Given columns
     convert_json(input_filename, output_filename, ["my_column", "my_int"])
 
+    # Given columns and custom field names
+    field_aliases = {'my_column': 'my_updated_column_name', "my_int": "my_integer"}
+    convert_json(input_filename, output_filename, ["my_column", "my_int"], field_aliases=field_aliases)
+
+
     # Given PyArrow schema
     import pyarrow as pa
     schema = pa.schema([
@@ -50,6 +55,10 @@ You can also work with Python data structures directly
 
     # Working with a list of dictionaries
     ingest_data(input_data, schema)
+
+    # Working with a list of dictionaries and custom field names
+    field_aliases = {'my_column': 'my_updated_column_name', "my_int": "my_integer"}
+    ingest_data(input_data, schema, field_aliases)
 
     # Writing Parquet Files from PyArrow Record Batches
     write_parquet(data, destination)
