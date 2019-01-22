@@ -134,7 +134,7 @@ def _date_converter(date_str):
     return (dt - epoch).days
 
 
-def load_json(filename, schema=None, date_format=None):
+def load_json(filename, schema=None, date_format=None, field_aliases=None):
     """
     Simple but inefficient way to load data from a newline delineated json file
     """
@@ -143,7 +143,7 @@ def load_json(filename, schema=None, date_format=None):
         for line in f.readlines():
             if line:
                 json_data.append(json.loads(line))
-    return ingest_data(json_data, schema=schema, date_format=date_format)
+    return ingest_data(json_data, schema=schema, date_format=date_format, field_aliases=field_aliases)
 
 
 def write_parquet(data, destination, **kwargs):
@@ -176,6 +176,6 @@ def write_parquet_dataset(data, destination, **kwargs):
     pq.write_to_dataset(table, destination, **kwargs)
 
 
-def convert_json(input, output, schema=None, date_format=None, **kwargs):
-    data = load_json(input, schema=schema, date_format=date_format)
+def convert_json(input, output, schema=None, date_format=None, field_aliases=None, **kwargs):
+    data = load_json(input, schema=schema, date_format=date_format, field_aliases=field_aliases)
     write_parquet(data, output, **kwargs)
