@@ -13,18 +13,23 @@ import pandas as pd
 epoch = datetime.datetime.utcfromtimestamp(0)
 
 
-def ingest_data(data, schema=None, date_format=None):
+def ingest_data(data, schema=None, date_format=None, field_aliases=None):
     """
     data: Array of Dictionary objects
     schema: PyArrow schema object or list of column names
     date_format: Pandas datetime format string (with schema only)
+    field_aliases: dict mapping Json field names to desired schema names
 
     return: a PyArrow Batch
     """
-    if isinstance(schema, list):
+    if isinstance(schema, list) and isinstance(field_aliases, dict):
+        return _convert_data_with_column_names_dict(data, field_aliases)
+    elif isinstance(schema, dict):
+        return _convert_data_with_column_names_dict(data, schema)
+    elif isinstance(schema, list):
         return _convert_data_with_column_names(data, schema)
     elif isinstance(schema, pa.Schema):
-        return _convert_data_with_schema(data, schema, date_format=date_format)
+        return _convert_data_with_schema(data, schema, date_format=date_format, field_aliases=field_aliases)
     else:
         return _convert_data_without_schema(data)
 
@@ -41,6 +46,23 @@ def _convert_data_without_schema(data):
     return _convert_data_with_column_names(data, column_names)
 
 
+def _convert_data_with_column_names_dict(data, schema):
+    column_data = {}
+    array_data = []
+    schema_names = []
+    for row in data:
+        for column in schema:
+            _col = column_data.get(column, [])
+            _col.append(row.get(column))
+            column_data[column] = _col
+    for column in schema.keys():
+        _col = column_data.get(column)
+        array_data.append(pa.array(_col))
+        # Use custom column names given by user
+        schema_names.append(schema[column])
+    return pa.RecordBatch.from_arrays(array_data, schema_names)
+
+
 def _convert_data_with_column_names(data, schema):
     column_data = {}
     array_data = []
@@ -55,9 +77,10 @@ def _convert_data_with_column_names(data, schema):
     return pa.RecordBatch.from_arrays(array_data, schema)
 
 
-def _convert_data_with_schema(data, schema, date_format=None):
+def _convert_data_with_schema(data, schema, date_format=None, field_aliases=None):
     column_data = {}
     array_data = []
+    schema_names = []
     for row in data:
         for column in schema.names:
             _col = column_data.get(column, [])
@@ -93,7 +116,11 @@ def _convert_data_with_schema(data, schema, date_format=None):
             array_data.append(pa.array(_col, type=column.type))
         else:
             array_data.append(pa.array(_col, type=column.type))
-    return pa.RecordBatch.from_arrays(array_data, schema.names)
+        if isinstance(field_aliases, dict):
+            schema_names.append(field_aliases.get(column.name, column.name))
+        else:
+            schema_names.append(column.name)
+    return pa.RecordBatch.from_arrays(array_data, schema_names)
 
 
 def _boolean_converter(val):

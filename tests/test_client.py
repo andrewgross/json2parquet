@@ -27,6 +27,25 @@ def test_ingest():
     assert converted_data.to_pydict() == {'foo': [1, 10], 'bar': [2, 20]}
 
 
+def test_ingest_with_field_aliases():
+    """
+    Test ingesting data with a given schema and field aliases
+    """
+    schema = pa.schema([
+        pa.field("foo", pa.int64()),
+        pa.field("bar", pa.int64())
+    ])
+
+    field_aliases = {
+        "foo": "corrected_foo",
+    }
+
+    data = [{"foo": 1, "bar": 2}, {"foo": 10, "bar": 20}]
+
+    converted_data = client.ingest_data(data, schema, field_aliases=field_aliases)
+    assert converted_data.to_pydict() == {'corrected_foo': [1, 10], 'bar': [2, 20]}
+
+
 def test_ingest_with_numeric_boolean():
     """
     Test ingesting data with boolean values given as numbers
@@ -99,6 +118,18 @@ def test_ingest_with_column_names():
 
     converted_data = client.ingest_data(data, schema)
     assert converted_data.to_pydict() == {'foo': [1, 10], 'bar': [2, 20]}
+
+
+def test_ingest_with_column_names_dict():
+    """
+    Test ingesting data with columns and user supplied aliases
+    """
+    schema = {"foo": "foo1", "bar": "bar2"}
+
+    data = [{"foo": 1, "bar": 2}, {"foo": 10, "bar": 20}]
+
+    converted_data = client.ingest_data(data, schema)
+    assert converted_data.to_pydict() == {'foo1': [1, 10], 'bar2': [2, 20]}
 
 
 def test_ingest_with_no_schema():
