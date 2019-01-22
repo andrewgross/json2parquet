@@ -1,6 +1,10 @@
 Changelog
 ---------
 
+0.0.26
+~~~~~~
+- Add `field_aliases` kwarg to loading methods to allow mapping a JSON column name to a different parquet column name.  Thanks to @sojovi for the idea.
+
 0.0.25
 ~~~~~~
 - Add `write_parquet_dataset` available as a default export, thanks to @gregburek
