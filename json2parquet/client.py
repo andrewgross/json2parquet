@@ -9,7 +9,6 @@ import pyarrow as pa
 import pyarrow.parquet as pq
 import pandas as pd
 
-
 epoch = datetime.datetime.utcfromtimestamp(0)
 
 
@@ -31,19 +30,21 @@ def ingest_data(data, schema=None, date_format=None, field_aliases=None):
     elif isinstance(schema, pa.Schema):
         return _convert_data_with_schema(data, schema, date_format=date_format, field_aliases=field_aliases)
     else:
-        return _convert_data_without_schema(data)
+        return _convert_data_without_column_names(data)
 
 
-def _convert_data_without_schema(data):
-    # Prepare for something ugly.
-    # Iterate over all of the data to find all of our column names
-    # Then parse the data as if we were given column names
-    column_names = set()
+def _convert_data_with_column_names(data, schema):
+    column_data = {}
+    array_data = []
     for row in data:
-        names = set(row.keys())
-        column_names = column_names.union(names)
-    column_names = sorted(list(column_names))
-    return _convert_data_with_column_names(data, column_names)
+        for column in schema:
+            _col = column_data.get(column, [])
+            _col.append(row.get(column))
+            column_data[column] = _col
+    for column in schema:
+        _col = column_data.get(column)
+        array_data.append(pa.array(_col))
+    return pa.RecordBatch.from_arrays(array_data, schema)
 
 
 def _convert_data_with_column_names_dict(data, schema):
@@ -62,18 +63,30 @@ def _convert_data_with_column_names_dict(data, schema):
         schema_names.append(schema[column])
     return pa.RecordBatch.from_arrays(array_data, schema_names)
 
+def f7(seq):
+    seen = set()
+    seen_add = seen.add
+    return [x for x in seq if not (x in seen or seen_add(x))]
 
-def _convert_data_with_column_names(data, schema):
+
+def _convert_data_without_column_names(data):
     column_data = {}
     array_data = []
+    schema = []
+    row_count = 0
     for row in data:
+        names = list(row.keys())
+        schema = f7(schema + names)
+        row_count += 1
         for column in schema:
-            _col = column_data.get(column, [])
+            _col = column_data.get(column, [None]*(row_count-1))
             _col.append(row.get(column))
             column_data[column] = _col
     for column in schema:
         _col = column_data.get(column)
         array_data.append(pa.array(_col))
+
+    schema=list(schema)
     return pa.RecordBatch.from_arrays(array_data, schema)
 
 
@@ -140,9 +153,9 @@ def load_json(filename, schema=None, date_format=None, field_aliases=None):
     """
     json_data = []
     with open(filename, "r") as f:
-        for line in f.readlines():
+        for line in f:
             if line:
-                json_data.append(json.loads(line))
+                json_data.append(json.loads(line.rstrip()))
     return ingest_data(json_data, schema=schema, date_format=date_format, field_aliases=field_aliases)
 
 
