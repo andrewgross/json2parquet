@@ -30,7 +30,7 @@ setup(
     author_email='andrew.w.gross@gmail.com',
     url='https://github.com/andrewgross/json2parquet',
     install_requires=[
-        'pyarrow==0.11.0',
+        'pyarrow>=0.11.1',
         'pandas==0.23.4',
         'numpy>=1.14.0',
         'ciso8601'
