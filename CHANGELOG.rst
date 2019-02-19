@@ -1,6 +1,10 @@
 Changelog
 ---------
 
+0.0.27
+~~~~~~
+- Update `pyarrow` to `0.0.12` to fix zlib issues and gain improved memory perf with lots of strings.  Thanks @nimish and @Madhu1512
+
 0.0.26
 ~~~~~~
 - Add `field_aliases` kwarg to loading methods to allow mapping a JSON column name to a different parquet column name.  Thanks to @sojovi for the idea.
