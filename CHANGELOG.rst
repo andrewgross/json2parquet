@@ -1,6 +1,10 @@
 Changelog
 ---------
 
+0.0.28
+~~~~~~
+- Update `pyarrow` to `0.0.14` and `pandas` to `0.24.2`.  Thanks to @rudaporto for the PR!
+
 0.0.27
 ~~~~~~
 - Update `pyarrow` to `0.0.12` to fix zlib issues and gain improved memory perf with lots of strings.  Thanks @nimish and @Madhu1512
