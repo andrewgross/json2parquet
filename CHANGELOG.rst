@@ -1,6 +1,10 @@
 Changelog
 ---------
 
+1.0.0
+~~~~~~
+- Update `pyarrow` to `<2.0.0` and `pandas` to `<2.0.0`.  Thanks to @zmjjmz for the PR!
+
 0.0.28
 ~~~~~~
 - Update `pyarrow` to `0.0.14` and `pandas` to `0.24.2`.  Thanks to @rudaporto for the PR!
