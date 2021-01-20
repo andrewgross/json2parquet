@@ -10,9 +10,17 @@ sets, or people who don't have a huge issue with speed.
 Installation
 ~~~~~~~~~~~~
 
+With pip:
+
 .. code:: bash
 
     pip install json2parquet
+
+With conda:
+
+.. code:: bash
+
+    conda install -c conda-forge json2parquet
 
 Usage
 ~~~~~
