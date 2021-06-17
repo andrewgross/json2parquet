@@ -15,9 +15,9 @@ cache:
   - $HOME/.cache/pip
 
 install:
-  - pip install pyarrow==0.11.0
-  - pip install pandas==0.23.4
-  - pip install numpy==1.15.0
+  - pip install pyarrow<6.0.0
+  - pip install pandas<2.0.0
+  - pip install numpy>=1.14.0
   - pip install ciso8601
   - make setup
 
