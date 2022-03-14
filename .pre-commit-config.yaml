@@ -13,8 +13,6 @@
     -   id: check-yaml
     -   id: debug-statements
     -   id: requirements-txt-fixer
-    -   id: flake8
-        exclude: \/migrations\/
 -   repo: git@github.com:pre-commit/pre-commit
     sha: v1.1.0
     hooks:

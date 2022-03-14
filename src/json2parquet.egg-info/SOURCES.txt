@@ -1,0 +1,14 @@
+CHANGELOG.rst
+LICENSE
+MANIFEST.in
+README.rst
+pyproject.toml
+setup.cfg
+src/json2parquet/__init__.py
+src/json2parquet/client.py
+src/json2parquet/helpers.py
+src/json2parquet.egg-info/PKG-INFO
+src/json2parquet.egg-info/SOURCES.txt
+src/json2parquet.egg-info/dependency_links.txt
+src/json2parquet.egg-info/requires.txt
+src/json2parquet.egg-info/top_level.txt
