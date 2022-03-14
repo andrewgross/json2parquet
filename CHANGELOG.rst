@@ -1,6 +1,11 @@
 Changelog
 ---------
 
+2.0.0
+~~~~~
+
+- Update `pyarrow` to `<6.0.0`, `pandas` to `<2.0.0` and `numpy` to `>=1.14.0`. Thanks to @sweco for the PR!
+
 1.0.0
 ~~~~~~
 - Update `pyarrow` to `<2.0.0` and `pandas` to `<2.0.0`.  Thanks to @zmjjmz for the PR!
