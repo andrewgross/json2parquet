@@ -4,7 +4,7 @@ from __future__ import unicode_literals
 import logging
 
 from inspect import cleandoc
-from urlparse import urlparse
+from urllib.parse import urlparse
 
 import pyarrow as pa
 
