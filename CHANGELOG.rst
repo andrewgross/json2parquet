@@ -1,6 +1,13 @@
 Changelog
 ---------
 
+2.1.0
+~~~~~
+
+- Update `pyarrow` to `<11.0.0`
+- Change urlparse import to be only Python 3 compatible
+- Drop support for Python 2
+
 2.0.0
 ~~~~~
 
