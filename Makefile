@@ -1,5 +1,5 @@
 PACKAGE=json2parquet
-CUSTOM_PIP_INDEX=pypi
+CUSTOM_PIP_INDEX=json2parquet
 
 all: setup test
 
@@ -38,12 +38,13 @@ install_deps:
 	@pre-commit install
 	@python setup.py develop &> .build.log
 
-publish: clean tag
+build:
+	python -m build --sdist --wheel
+
+publish: clean tag build
 	@if [ -e "$$HOME/.pypirc" ]; then \
 		echo "Uploading to '$(CUSTOM_PIP_INDEX)'"; \
-		python setup.py sdist upload -r "$(CUSTOM_PIP_INDEX)"; \
-		python setup.py bdist_wheel upload -r "$(CUSTOM_PIP_INDEX)"; \
-		python3 setup.py bdist_wheel upload -r "$(CUSTOM_PIP_INDEX)"; \
+		python -m twine upload --repository $(CUSTOM_PIP_INDEX) dist/*; \
 	else \
 		echo "You should create a file called '.pypirc' under your home dir.\n"; \
 		echo "That's the right place to configure 'pypi' repos.\n"; \
