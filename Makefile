@@ -36,7 +36,7 @@ install_deps:
 		[ -e development.txt  ] && pip install -r development.txt; \
 	fi
 	@pre-commit install
-	@python setup.py develop &> .build.log
+	@python install -e . &> .build.log
 
 build:
 	python -m build --sdist --wheel
