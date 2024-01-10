@@ -1,3 +1,4 @@
+src/json2parquet.egg-info/
 tests/__pycache__
 .cache
 *.pyc
