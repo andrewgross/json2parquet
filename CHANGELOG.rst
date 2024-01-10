@@ -1,6 +1,12 @@
 Changelog
 ---------
 
+2.2.0
+~~~~~
+
+- Unlock `pandas` and `pyarrow` versions in `setup.cfg`. Thanks @DManowitz for the reminder
+- Clean up some accidentally commit egg files
+
 2.1.0
 ~~~~~
 
